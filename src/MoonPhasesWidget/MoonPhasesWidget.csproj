@@ -12,4 +12,8 @@
     <InternalsVisibleTo Include="MoonPhasesWidget.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Assets\moon.jpg" />
+  </ItemGroup>
+
 </Project>
