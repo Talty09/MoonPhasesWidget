@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A Windows desktop widget, similar to a Rainmeter skin, that shows the current phase of the moon. It is a standalone C# / WPF app on .NET 8 and does not depend on Rainmeter. The repo will be published to the `Talty09` GitHub account.
 
-> Status: the project is new and no code exists yet. The layout and commands below are the planned design. Update this file as the real structure takes shape.
+> Status: the moon phase math and its tests are done. The widget window, rendering, settings and tray icon are still to be built, so the parts of this file that describe them are the plan, not existing code.
 
 ## Planned layout
 
@@ -30,6 +30,7 @@ dotnet publish src/MoonPhasesWidget -c Release -r win-x64 --self-contained -p:Pu
 ## Architecture intent
 
 - **Keep the astronomy separate from the UI.** Moon phase math (illuminated fraction, phase angle, moon age, phase name, next new and full moon) goes in a pure class with no WPF dependencies. It takes a `DateTime` (UTC), so it can be tested against known dates. Compute everything locally; the core feature should not need network calls.
+  This lives in `src/MoonPhasesWidget/Astronomy/` and follows Meeus, *Astronomical Algorithms* (2nd ed.), ch. 47–49. When checking it against references, remember that Meeus's results are in Terrestrial Time; `AstroTime` converts to and from UTC using ΔT. Tests can reach `internal` members through `InternalsVisibleTo`.
 - **The widget window behaves like a Rainmeter skin:** borderless, transparent (`WindowStyle=None`, `AllowsTransparency=True`), hidden from the taskbar, draggable, and optionally pinned to the desktop or always on top. Window position and user settings persist between runs, for example as JSON under `%APPDATA%\MoonPhasesWidget`.
 - **Rendering** draws the moon from the computed illumination and waxing/waning state, rather than switching between a fixed set of images. A timer refreshes the display periodically; the phase changes slowly, so a long interval is fine.
 - **Lifecycle:** a tray icon provides exit, settings, and an option to start with Windows.
