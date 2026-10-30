@@ -1,0 +1,42 @@
+# Pushing a version tag (for example v1.2.0) builds the installer and publishes a GitHub Release with it attached.
+name: Release
+
+on:
+  push:
+    # Plain x.y.z only: Inno Setup's VersionInfoVersion rejects suffixes such as -beta.
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Test
+        run: dotnet test -c Release
+
+      - name: Install Inno Setup
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+
+      - name: Build installer
+        run: ./installer/build.ps1 -Version $env:GITHUB_REF_NAME.TrimStart('v')
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/MoonPhasesWidget-Setup-*.exe
+          generate_release_notes: true
+          fail_on_unmatched_files: true

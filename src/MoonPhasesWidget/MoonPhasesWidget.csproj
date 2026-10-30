@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\moon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>Moon Phase Widget</Product>
+    <Company>Talty09</Company>
+    <Description>A desktop widget that shows the current phase of the moon.</Description>
+    <Copyright>Copyright © 2026 Tom Talty</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

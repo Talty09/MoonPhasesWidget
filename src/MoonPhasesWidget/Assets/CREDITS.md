@@ -5,3 +5,5 @@
 
 Image credit: NASA's Scientific Visualization Studio. Visualization by Ernie Wright (USRA).
 Used under NASA's [media usage guidelines](https://www.nasa.gov/nasa-brand-center/images-and-media/).
+
+`moon.ico`, the app and installer icon, is made from `moon.jpg` and carries the same credit.
